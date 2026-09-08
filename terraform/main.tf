@@ -1,17 +1,17 @@
 resource "snowflake_database" "tf_db" {
-  name         = "TF_DEMO_DB"
+  name         = var.snowflake_database_name
   is_transient = false
 }
 
 resource "google_storage_bucket" "my_bucket" {
-  name     = "harpreet_singh_nyc311"
-  location = "asia-south1"
+  name     = var.gcs_bucket_name
+  location = var.gcs_bucket_location
   versioning {
     enabled = true
   }
   lifecycle_rule {
     condition {
-      age = 30
+      age = var.gcs_bucket_object_retention_days
     }
     action {
       type = "Delete"

@@ -1,14 +1,15 @@
-provider "snowflake" {
-  organization_name = "GUSDATD"
-  account_name      = "DAB70621"
-  user              = "HARPREET.SINGH"
-  role              = "SE_DE_PARTICIPANT"
-  authenticator     = "SNOWFLAKE_JWT"
-  private_key       = file("./keys/snowflake_rsa_key.p8")
+provider "google" {
+  project     = var.google_project_id
+  credentials = file(var.google_credentials_path)
+  region      = var.google_region
 }
 
-provider "google" {
-  project     = "ee-india-se-data"
-  credentials = file("./keys/ee-india-se-data-01d41119c96e.json")
-  region      = "us-central1"
+provider "snowflake" {
+  organization_name = var.snowflake_organization_name
+  account_name      = var.snowflake_account_name
+  user              = var.snowflake_user
+  role              = var.snowflake_role
+  authenticator     = "SNOWFLAKE_JWT"
+  private_key       = file(var.snowflake_private_key_path)
+  warehouse         = var.snowflake_warehouse_name
 }
