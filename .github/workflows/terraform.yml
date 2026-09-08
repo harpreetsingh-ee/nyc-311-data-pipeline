@@ -47,17 +47,17 @@ jobs:
           test -n "$GOOGLE_CREDENTIALS_JSON" || { echo "Missing GOOGLE_CREDENTIALS_JSON secret"; exit 1; }
           test -n "$SNOWFLAKE_PRIVATE_KEY" || { echo "Missing SNOWFLAKE_PRIVATE_KEY secret"; exit 1; }
           
-          mkdir -p keys
-          printf '%s' "$GOOGLE_CREDENTIALS_JSON" > keys/google-credentials.json
-          printf '%s' "$SNOWFLAKE_PRIVATE_KEY" > keys/snowflake_rsa_key.p8
+          mkdir -p "$RUNNER_TEMP/terraform-keys"
+          printf '%s' "$GOOGLE_CREDENTIALS_JSON" > "$RUNNER_TEMP/terraform-keys/google-credentials.json"
+          printf '%s' "$SNOWFLAKE_PRIVATE_KEY" > "$RUNNER_TEMP/terraform-keys/snowflake_rsa_key.p8"
           
-          cat > ci.tfvars <<EOF
-          google_credentials_path       = "${{ github.workspace }}/terraform/keys/google-credentials.json"
-          snowflake_private_key_path    = "${{ github.workspace }}/terraform/keys/snowflake_rsa_key.p8"
+          cat > "$RUNNER_TEMP/ci.tfvars" <<EOF
+          google_credentials_path       = "$RUNNER_TEMP/terraform-keys/google-credentials.json"
+          snowflake_private_key_path    = "$RUNNER_TEMP/terraform-keys/snowflake_rsa_key.p8"
           EOF
 
       - name: Configure Google credentials
-        run: echo "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/terraform/keys/google-credentials.json" >> "$GITHUB_ENV"
+        run: echo "GOOGLE_APPLICATION_CREDENTIALS=$RUNNER_TEMP/terraform-keys/google-credentials.json" >> "$GITHUB_ENV"
 
       - name: Terraform format check
         run: terraform fmt -check -recursive
@@ -70,12 +70,12 @@ jobs:
 
       - name: Terraform plan
         if: inputs.action == 'plan'
-        run: terraform plan -input=false -var-file=ci.tfvars -no-color
+        run: terraform plan -input=false -var-file="$RUNNER_TEMP/ci.tfvars" -no-color
 
       - name: Terraform apply
         if: inputs.action == 'apply'
-        run: terraform apply -input=false -auto-approve -var-file=ci.tfvars
+        run: terraform apply -input=false -auto-approve -var-file="$RUNNER_TEMP/ci.tfvars"
 
       - name: Terraform destroy
         if: inputs.action == 'destroy'
-        run: terraform destroy -input=false -auto-approve -var-file=ci.tfvars
+        run: terraform destroy -input=false -auto-approve -var-file="$RUNNER_TEMP/ci.tfvars"
