@@ -12,4 +12,6 @@ provider "snowflake" {
   authenticator     = "SNOWFLAKE_JWT"
   private_key       = file(var.snowflake_private_key_path)
   warehouse         = var.snowflake_warehouse_name
+
+  preview_features_enabled = ["snowflake_table_resource"]
 }

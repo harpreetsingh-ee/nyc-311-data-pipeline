@@ -64,3 +64,22 @@ variable "snowflake_database_name" {
   description = "Name of the Snowflake database to create."
   type        = string
 }
+
+variable "snowflake_schema_names" {
+  description = "Names of the Snowflake schemas to create."
+  type        = list(string)
+}
+
+variable "snowflake_schema_prefix" {
+  description = "Prefix applied to each Snowflake schema name."
+  type        = string
+}
+
+variable "snowflake_table_columns" {
+  description = "Column definitions for the NYC 311 Snowflake table."
+  type = list(object({
+    name    = string
+    type    = string
+    default = optional(string)
+  }))
+}
