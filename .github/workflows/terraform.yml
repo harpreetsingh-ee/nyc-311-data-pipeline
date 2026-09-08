@@ -1,0 +1,81 @@
+name: Terraform
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: Terraform action to run
+        required: true
+        default: plan
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+
+permissions:
+  contents: read
+
+env:
+  TF_IN_AUTOMATION: true
+  TF_INPUT: false
+  TF_VAR_snowflake_organization_name: ${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}
+  TF_VAR_snowflake_account_name: ${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}
+  TF_VAR_snowflake_user: ${{ secrets.SNOWFLAKE_USER }}
+  TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
+
+jobs:
+  terraform:
+    name: Terraform ${{ inputs.action }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Write Terraform secrets and variables
+        env:
+          GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+          SNOWFLAKE_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_PRIVATE_KEY }}
+        run: |
+          test -n "$GOOGLE_CREDENTIALS_JSON" || { echo "Missing GOOGLE_CREDENTIALS_JSON secret"; exit 1; }
+          test -n "$SNOWFLAKE_PRIVATE_KEY" || { echo "Missing SNOWFLAKE_PRIVATE_KEY secret"; exit 1; }
+          
+          mkdir -p keys
+          printf '%s' "$GOOGLE_CREDENTIALS_JSON" > keys/google-credentials.json
+          printf '%s' "$SNOWFLAKE_PRIVATE_KEY" > keys/snowflake_rsa_key.p8
+          
+          cat > ci.tfvars <<EOF
+          google_credentials_path       = "${{ github.workspace }}/terraform/keys/google-credentials.json"
+          snowflake_private_key_path    = "${{ github.workspace }}/terraform/keys/snowflake_rsa_key.p8"
+          EOF
+
+      - name: Configure Google credentials
+        run: echo "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/terraform/keys/google-credentials.json" >> "$GITHUB_ENV"
+
+      - name: Terraform format check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        run: terraform init -input=false
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Terraform plan
+        if: inputs.action == 'plan'
+        run: terraform plan -input=false -var-file=ci.tfvars -no-color
+
+      - name: Terraform apply
+        if: inputs.action == 'apply'
+        run: terraform apply -input=false -auto-approve -var-file=ci.tfvars
+
+      - name: Terraform destroy
+        if: inputs.action == 'destroy'
+        run: terraform destroy -input=false -auto-approve -var-file=ci.tfvars
