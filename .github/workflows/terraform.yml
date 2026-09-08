@@ -69,7 +69,7 @@ jobs:
         run: terraform validate
 
       - name: Terraform plan
-        if: inputs.action == 'plan'
+        if: inputs.action == 'plan' || inputs.action == 'apply'
         run: terraform plan -input=false -var-file="$RUNNER_TEMP/ci.tfvars" -no-color
 
       - name: Terraform apply

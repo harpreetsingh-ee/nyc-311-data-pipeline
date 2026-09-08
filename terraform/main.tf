@@ -32,7 +32,7 @@ resource "snowflake_schema" "schema" {
 
 resource "snowflake_table" "table" {
   database                    = var.snowflake_database_name
-  schema                      = "${var.snowflake_schema_prefix}_${upper(var.snowflake_schema_names[0])}"
+  schema                      = snowflake_schema.schema[var.snowflake_schema_names[0]].name
   name                        = "NYC_311_DATASET"
   comment                     = "NYC_311_DATASET"
   data_retention_time_in_days = 30
