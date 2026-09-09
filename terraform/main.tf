@@ -15,6 +15,12 @@ resource "google_storage_bucket" "my_bucket" {
   }
 }
 
+resource "google_storage_bucket_iam_member" "snowflake_reader" {
+  bucket = google_storage_bucket.my_bucket.name
+  role   = "roles/storage.objectViewer"
+  member = "serviceAccount:k4if00000@va3-22da.iam.gserviceaccount.com"
+}
+
 # SNOWFLAKE RESOURCES
 # resource "snowflake_database" "tf_db" {
 #   name         = var.snowflake_database_name
