@@ -61,3 +61,31 @@ resource "snowflake_table" "table" {
     }
   }
 }
+
+resource "snowflake_file_format_csv" "complete" {
+  name     = "${var.snowflake_schema_prefix}_nyc_311_csv_format"
+  database = var.snowflake_database_name
+  schema   = snowflake_schema.schema[var.snowflake_schema_names[0]].name
+
+  skip_header                  = 1
+  field_optionally_enclosed_by = "\""
+  null_if                      = ["NULL", "", "N/A"]
+  field_delimiter              = ","
+  date_format                  = "YYYY-MM-DD"
+  timestamp_format             = "YYYY-MM-DD HH24:MI:SS"
+  escape_unenclosed_field      = "NONE"
+  trim_space                   = true
+  empty_field_as_null          = true
+}
+
+resource "snowflake_stage_external_gcs" "stage" {
+  name                = "${var.snowflake_schema_prefix}_nyc_311_stage"
+  url                 = "gcs://${google_storage_bucket.my_bucket.name}/"
+  database            = var.snowflake_database_name
+  schema              = snowflake_schema.schema[var.snowflake_schema_names[0]].name
+  storage_integration = "GCS_NYC311_INTEGRATION"
+  file_format {
+    format_name = snowflake_file_format_csv.complete.fully_qualified_name
+  }
+}
+
