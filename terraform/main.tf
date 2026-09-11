@@ -89,3 +89,27 @@ resource "snowflake_stage_external_gcs" "stage" {
   }
 }
 
+resource "snowflake_pipe" "pipe_with_stage" {
+  name     = "${var.snowflake_schema_prefix}_nyc_311_pipe"
+  database = var.snowflake_database_name
+  schema   = snowflake_schema.schema[var.snowflake_schema_names[0]].name
+
+  # integration = snowflake_stage_external_gcs.stage.storage_integration
+
+  copy_statement = <<-SQL
+    COPY INTO ${snowflake_table.table.fully_qualified_name}
+    FROM @${snowflake_stage_external_gcs.stage.fully_qualified_name}/
+    FILE_FORMAT = (
+      FORMAT_NAME = ${snowflake_file_format_csv.complete.fully_qualified_name},
+      ERROR_ON_COLUMN_COUNT_MISMATCH = FALSE
+    )
+    ON_ERROR = 'CONTINUE'
+  SQL
+
+  # lifecycle {
+  #   replace_triggered_by = [
+  #     snowflake_stage_external_gcs.stage.url,
+  #     snowflake_stage_external_gcs.stage.storage_integration,
+  #   ]
+  # }
+}

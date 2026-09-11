@@ -9,6 +9,6 @@ output "bucket_url" {
 }
 
 output "snowflake_stage_name" {
-  value       = snowflake_stage_external_gcs.stage.name
+  value       = snowflake_stage_external_gcs.stage.fully_qualified_name
   description = "The name of the created Snowflake stage."
 }

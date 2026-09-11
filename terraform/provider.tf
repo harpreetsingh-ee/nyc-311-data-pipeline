@@ -13,5 +13,5 @@ provider "snowflake" {
   private_key       = file(var.snowflake_private_key_path)
   warehouse         = var.snowflake_warehouse_name
 
-  preview_features_enabled = ["snowflake_table_resource", "snowflake_file_format_csv_resource"]
+  preview_features_enabled = ["snowflake_table_resource", "snowflake_file_format_csv_resource", "snowflake_pipe_resource"]
 }
