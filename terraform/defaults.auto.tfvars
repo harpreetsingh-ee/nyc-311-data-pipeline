@@ -4,10 +4,13 @@ gcs_bucket_object_retention_days = 30
 google_project_id                = "ee-india-se-data"
 google_region                    = "us-central1"
 
-snowflake_warehouse_name = "SNOWFLAKE_LEARNING_WH"
-snowflake_database_name  = "DE_CROSS_SKILLING_NYC_311"
-snowflake_schema_names   = ["raw", "currated", "consume"]
-snowflake_schema_prefix  = "HARPREET_SINGH"
+# Snowflake GCS Integration Service Account (get from Snowflake → Admin → Data Lake)
+snowflake_service_account          = "k4if00000@va3-22da.iam.gserviceaccount.com"
+snowflake_storage_integration_name = "GCS_NYC311_INTEGRATION"
+snowflake_warehouse_name           = "SNOWFLAKE_LEARNING_WH"
+snowflake_database_name            = "DE_CROSS_SKILLING_NYC_311"
+snowflake_schema_names             = ["raw", "currated", "consume"]
+snowflake_schema_prefix            = "HARPREET_SINGH"
 
 snowflake_table_columns = [
   { name = "UNIQUE_KEY", type = "NUMBER(38,0)" },

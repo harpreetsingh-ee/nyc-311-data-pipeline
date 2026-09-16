@@ -83,3 +83,21 @@ variable "snowflake_table_columns" {
     default = optional(string)
   }))
 }
+
+variable "snowflake_service_account" {
+  description = "Snowflake GCS integration service account email."
+  type        = string
+  sensitive   = true
+}
+
+variable "snowflake_storage_integration_name" {
+  description = "Name of the existing Snowflake GCS storage integration."
+  type        = string
+}
+
+variable "state_encryption_key" {
+  description = "Encryption key for Terraform state backend."
+  type        = string
+  sensitive   = true
+  default     = ""
+}

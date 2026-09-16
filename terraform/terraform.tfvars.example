@@ -1,0 +1,54 @@
+# Example Terraform Variables
+# Copy this to terraform.tfvars and fill in your actual values
+# NOTE: terraform.tfvars is in .gitignore - never commit sensitive values
+
+# ============================================================================
+# GCS Configuration (Defaults in defaults.auto.tfvars, override here if needed)
+# ============================================================================
+# gcs_bucket_name                  = "your-bucket-name"
+# gcs_bucket_location              = "asia-south1"
+# gcs_bucket_object_retention_days = 30
+
+# ============================================================================
+# Google Cloud Configuration
+# ============================================================================
+# google_project_id       = "your-gcp-project-id"
+# google_region           = "us-central1"
+# google_credentials_path = "/path/to/service-account-key.json"
+
+# ============================================================================
+# Snowflake Configuration (Defaults in defaults.auto.tfvars, override here if needed)
+# ============================================================================
+# snowflake_organization_name = "YOUR_ORG"
+# snowflake_account_name      = "YOUR_ACCOUNT"
+# snowflake_user              = "YOUR_USER"
+# snowflake_role              = "YOUR_ROLE"
+# snowflake_warehouse_name    = "SNOWFLAKE_LEARNING_WH"
+# snowflake_database_name     = "DE_CROSS_SKILLING_NYC_311"
+# snowflake_private_key_path  = "/path/to/private-key.pem"
+
+# ============================================================================
+# REQUIRED: Snowflake GCS Service Account
+# ============================================================================
+# Get this from Snowflake:
+# 1. Admin > Data Lake > Storage Integrations
+# 2. Click on GCS_NYC311_INTEGRATION
+# 3. Copy the "GCS Service Account" value
+# Format: snow-XXXXXXXX@XXXXXXXX.iam.gserviceaccount.com
+snowflake_service_account = "snow-XXXXXXXXXXXXX@xxxxxxx.iam.gserviceaccount.com"
+
+# ============================================================================
+# REQUIRED: Snowflake Storage Integration Name
+# ============================================================================
+# The name of the existing Snowflake GCS storage integration
+# Must already exist in Snowflake
+snowflake_storage_integration_name = "GCS_NYC311_INTEGRATION"
+
+# ============================================================================
+# OPTIONAL: Terraform State Backend Encryption
+# ============================================================================
+# Use only if you want application-level encryption of state
+# Format: base64-encoded 32-byte key
+# Generate with: openssl rand 32 | base64
+# state_encryption_key = "your-base64-encoded-key"
+
