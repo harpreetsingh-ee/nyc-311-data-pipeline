@@ -7,6 +7,10 @@ to the team's dedicated GCS bucket. Includes file listing and copy validation.
 Schedule: Manual trigger only
 Owner: Data Engineering Team
 SLA: Must complete within 4 hours
+
+Configuration: include/constants.py
+Environment: Set AIRFLOW_ENV=dev|staging|prod (default: dev)
+Overrides: Use environment variables (GCS_SOURCE_BUCKET=value, etc.)
 """
 
 import logging
@@ -15,31 +19,35 @@ from airflow.decorators import dag, task
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 from airflow.exceptions import AirflowException
 
-logger = logging.getLogger(__name__)
+from include.constants import (
+    GCS_CONN_ID,
+    GCS_SOURCE_BUCKET,
+    GCS_DESTINATION_BUCKET,
+    GCS_PREFIX,
+    DAG_OWNER,
+    DAG_EMAIL_ALERTS,
+    DAG_RETRIES,
+    DAG_RETRY_DELAY,
+    DAG_SLA_HOURS,
+)
 
-# Define your GCS constants
-GCS_CONN_ID = "gcloud-connection"
-SOURCE_BUCKET_NAME = "nyc-311-dataset"
-DESTINATION_BUCKET_NAME = "harpreet_singh_nyc311"
-PREFIX = ""
+logger = logging.getLogger(__name__)
 
 
 @dag(
     dag_id="gcs_bucket_reader_dag",
     start_date=datetime(2026, 1, 1),
-    schedule_interval=None,
+    schedule=None,
     catchup=False,
     tags=["gcs", "metadata", "prod"],
-    owner="data-engineering",
     description="Copy NYC 311 dataset from public GCS bucket to team bucket",
-    default_view="graph",
-    sla=timedelta(hours=4),
-    email=["data-alerts@company.com"],
-    email_on_failure=True,
-    email_on_retry=False,
     default_args={
-        "retries": 2,
-        "retry_delay": timedelta(minutes=5),
+        "owner": DAG_OWNER,
+        "retries": DAG_RETRIES,
+        "retry_delay": DAG_RETRY_DELAY,
+        "email": DAG_EMAIL_ALERTS,
+        "email_on_failure": True,
+        "email_on_retry": False,
     }
 )
 def gcs_bucket_reader_dag():
@@ -48,14 +56,14 @@ def gcs_bucket_reader_dag():
     def list_bucket_contents():
         """List all files in source GCS bucket."""
         try:
-            logger.info(f"Listing files in bucket '{SOURCE_BUCKET_NAME}'")
+            logger.info(f"Listing files in bucket '{GCS_SOURCE_BUCKET}'")
             gcs_hook = GCSHook(gcp_conn_id=GCS_CONN_ID)
-            files = gcs_hook.list(bucket_name=SOURCE_BUCKET_NAME, prefix=PREFIX)
+            files = gcs_hook.list(bucket_name=GCS_SOURCE_BUCKET, prefix=GCS_PREFIX)
 
             if not files:
-                raise AirflowException(f"No files found in bucket '{SOURCE_BUCKET_NAME}'")
+                raise AirflowException(f"No files found in bucket '{GCS_SOURCE_BUCKET}'")
 
-            logger.info(f"✓ Listed {len(files)} files in bucket '{SOURCE_BUCKET_NAME}'")
+            logger.info(f"✓ Listed {len(files)} files in bucket '{GCS_SOURCE_BUCKET}'")
             return files
         except Exception as e:
             logger.error(f"✗ Failed to list bucket contents: {str(e)}", exc_info=True)
@@ -65,20 +73,20 @@ def gcs_bucket_reader_dag():
     def copy_file_to_bucket():
         """Sync all files from source to destination bucket."""
         try:
-            logger.info(f"Starting sync: '{SOURCE_BUCKET_NAME}' → '{DESTINATION_BUCKET_NAME}'")
+            logger.info(f"Starting sync: '{GCS_SOURCE_BUCKET}' → '{GCS_DESTINATION_BUCKET}'")
             logger.info("Sync parameters: recursive=True, allow_overwrite=True, delete_extra_files=False")
 
             gcs_hook = GCSHook(gcp_conn_id=GCS_CONN_ID)
             gcs_hook.sync(
-                source_bucket=SOURCE_BUCKET_NAME,
-                destination_bucket=DESTINATION_BUCKET_NAME,
+                source_bucket=GCS_SOURCE_BUCKET,
+                destination_bucket=GCS_DESTINATION_BUCKET,
                 source_object=None,
                 destination_object=None,
                 recursive=True,
                 allow_overwrite=True,
                 delete_extra_files=False
             )
-            logger.info(f"✓ Successfully synced files to '{DESTINATION_BUCKET_NAME}'")
+            logger.info(f"✓ Successfully synced files to '{GCS_DESTINATION_BUCKET}'")
         except Exception as e:
             logger.error(f"✗ GCS sync failed: {str(e)}", exc_info=True)
             raise AirflowException(f"GCS sync failed: {str(e)}")
@@ -89,10 +97,10 @@ def gcs_bucket_reader_dag():
         try:
             logger.info("Validating GCS copy operation...")
             gcs_hook = GCSHook(gcp_conn_id=GCS_CONN_ID)
-            dest_files = gcs_hook.list(bucket_name=DESTINATION_BUCKET_NAME, prefix=PREFIX)
+            dest_files = gcs_hook.list(bucket_name=GCS_DESTINATION_BUCKET, prefix=GCS_PREFIX)
 
             if not dest_files:
-                raise AirflowException(f"No files found in destination bucket '{DESTINATION_BUCKET_NAME}'")
+                raise AirflowException(f"No files found in destination bucket '{GCS_DESTINATION_BUCKET}'")
 
             if len(dest_files) < len(source_files):
                 logger.warning(
