@@ -1,0 +1,22 @@
+name: dbtapp
+
+profile: dbt
+
+seed-paths: ["seeds"]
+model-paths: ["models"]
+macro-paths: ["macros"]
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# seeds:
+#   # Builds seeds into '<your_schema_name>_raw'
+#   dbtapp:
+#     +schema: HARPREET_SINGH
+
+models:
+  dbtapp:
+    +static_analysis: strict
+    # Materialize staging models as views, and marts as tables
+    staging:
+      +materialized: view
