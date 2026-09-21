@@ -1,7 +1,8 @@
 # GCS RESOURCES: create bucket and set retention policy
 resource "google_storage_bucket" "my_bucket" {
-  name     = var.gcs_bucket_name
-  location = var.gcs_bucket_location
+  name          = var.gcs_bucket_name
+  location      = var.gcs_bucket_location
+  force_destroy = true
 
   versioning {
     enabled = true
@@ -105,8 +106,60 @@ resource "snowflake_pipe" "pipe_with_stage" {
   # integration = snowflake_stage_external_gcs.stage.storage_integration
 
   copy_statement = <<-SQL
-    COPY INTO ${snowflake_table.table.fully_qualified_name}
-    FROM @${snowflake_stage_external_gcs.stage.fully_qualified_name}/
+    COPY INTO ${snowflake_table.table.fully_qualified_name} (
+      UNIQUE_KEY,
+      CREATED_DATE,
+      CLOSED_DATE,
+      AGENCY,
+      AGENCY_NAME,
+      COMPLAINT_TYPE,
+      DESCRIPTOR,
+      LOCATION_TYPE,
+      INCIDENT_ZIP,
+      INCIDENT_ADDRESS,
+      STREET_NAME,
+      CROSS_STREET_1,
+      CROSS_STREET_2,
+      INTERSECTION_STREET_1,
+      INTERSECTION_STREET_2,
+      ADDRESS_TYPE,
+      CITY,
+      LANDMARK,
+      FACILITY_TYPE,
+      STATUS,
+      DUE_DATE,
+      RESOLUTION_DESCRIPTION,
+      RESOLUTION_ACTION_UPDATED_DATE,
+      COMMUNITY_BOARD,
+      BOROUGH,
+      X_COORDINATE,
+      Y_COORDINATE,
+      PARK_FACILITY_NAME,
+      PARK_BOROUGH,
+      BBL,
+      OPEN_DATA_CHANNEL_TYPE,
+      VEHICLE_TYPE,
+      TAXI_COMPANY_BOROUGH,
+      TAXI_PICKUP_LOCATION,
+      BRIDGE_HIGHWAY_NAME,
+      BRIDGE_HIGHWAY_DIRECTION,
+      ROAD_RAMP,
+      BRIDGE_HIGHWAY_SEGMENT,
+      LATITUDE,
+      LONGITUDE,
+      LOCATION,
+      LOADED_AT
+    )
+    FROM (
+      SELECT
+        $1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
+        $11, $12, $13, $14, $15, $16, $17, $18, $19, $20,
+        $21, $22, $23, $24, $25, $26, $27, $28, $29, $30,
+        $31, $32, $33, $34, $35, $36, $37, $38, $39, $40,
+        $41,
+        CURRENT_TIMESTAMP()::TIMESTAMP_NTZ AS LOADED_AT
+      FROM @${snowflake_stage_external_gcs.stage.fully_qualified_name}/
+    )
     FILE_FORMAT = (
       FORMAT_NAME = ${snowflake_file_format_csv.complete.fully_qualified_name},
       ERROR_ON_COLUMN_COUNT_MISMATCH = FALSE
