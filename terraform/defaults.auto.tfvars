@@ -9,7 +9,7 @@ snowflake_service_account          = "k4if00000@va3-22da.iam.gserviceaccount.com
 snowflake_storage_integration_name = "GCS_NYC311_INTEGRATION"
 snowflake_warehouse_name           = "SNOWFLAKE_LEARNING_WH"
 snowflake_database_name            = "DE_CROSS_SKILLING_NYC_311"
-snowflake_schema_names             = ["raw", "currated", "consume"]
+snowflake_schema_names             = ["raw", "curated", "consume"]
 snowflake_schema_prefix            = "HARPREET_SINGH"
 
 snowflake_table_columns = [
