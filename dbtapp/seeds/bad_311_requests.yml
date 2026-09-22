@@ -1,0 +1,14 @@
+version: 2
+
+seeds:
+  - name: bad_311_requests
+    description: "Seed with a duplicate unique_key to validate the uniqueness test."
+    config:
+      schema: "TESTS"
+    columns:
+      - name: unique_key
+      - name: created_date
+      - name: closed_date
+      - name: borough
+      - name: complaint_type
+      - name: status

@@ -30,3 +30,9 @@ models:
       +materialized: table
       +schema: CONSUME
     
+    tests:
+      +materialized: table
+      +schema: TESTS
+
+vars:
+  resolution_hours_threshold: 72

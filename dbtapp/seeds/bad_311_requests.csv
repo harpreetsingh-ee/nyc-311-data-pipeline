@@ -1,0 +1,4 @@
+unique_key,created_date,closed_date,borough,complaint_type,status
+999001,2026-09-01 10:00:00,,Brooklyn,Noise - Residential,Open
+999002,2026-09-01 11:00:00,2026-09-01 15:00:00,Queens,Illegal Parking,Closed
+999001,2026-09-01 10:00:00,,Brooklyn,Noise - Residential,Open

@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: dq_311_service_requests_test
+    description: "Temporary model combining staging rows with intentionally bad duplicate rows for QA exercise."
+    config:
+      materialized: view
+      schema: "TESTS"
+    columns:
+      - name: unique_key
+        tests:
+          - unique
+          - not_null
+      - name: created_date
+        tests:
+          - not_null
+      - name: closed_date
+      - name: borough
+        tests:
+          - accepted_values:
+              arguments:
+                values: ["Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island", "Unspecified"]
+      - name: complaint_type
+      - name: status
