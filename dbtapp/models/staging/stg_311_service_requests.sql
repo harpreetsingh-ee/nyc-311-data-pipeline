@@ -1,3 +1,8 @@
+{{ config(
+    materialized='incremental',
+    unique_key='unique_key'
+) }}
+
 WITH source AS (
     SELECT *
     FROM {{ source('cross_skilling_nyc_311', 'NYC_311_DATASET') }}
@@ -21,3 +26,9 @@ SELECT
     TRY_TO_TIMESTAMP_NTZ(due_date, 'YYYY-MM-DD HH24:MI:SS "UTC"') AS due_date,
     CURRENT_TIMESTAMP()::TIMESTAMP_NTZ AS ingested_at
 FROM source
+{% if is_incremental() %}
+    WHERE loaded_at >= (
+        SELECT MAX(loaded_at)
+        FROM {{ this }}
+    )
+{% endif %}
