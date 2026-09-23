@@ -26,6 +26,7 @@ SELECT
     resolution_action_updated_date,
     open_data_channel_type,
     loaded_at
+    ingested_at
 FROM source
 WHERE resolution_hours > 0
 {% if is_incremental() %}
