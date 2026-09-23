@@ -5,6 +5,7 @@ profile: dbt
 seed-paths: ["seeds"]
 model-paths: ["models"]
 macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
 clean-targets:
   - "target"
   - "dbt_packages"
@@ -13,6 +14,7 @@ clean-targets:
 #   # Builds seeds into '<your_schema_name>_raw'
 #   dbtapp:
 #     +schema: HARPREET_SINGH
+
 
 models:
   dbtapp:
