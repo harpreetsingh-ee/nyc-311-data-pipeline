@@ -1,0 +1,9 @@
+
+version: 2
+
+models:
+  - name: raw_311_service_requests_incremental
+    description: "raw model for 311 service requests data + seed data"
+    config:
+      materialized: table
+      tags: ['nyc_311', 'incremental']

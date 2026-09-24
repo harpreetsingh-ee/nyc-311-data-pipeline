@@ -1,0 +1,11 @@
+
+version: 2
+
+models:
+  - name: stg_311_service_requests_incremental
+    description: "Staging model for 311 service requests data"
+    config:
+      materialized: incremental
+      unique_key: unique_key
+      incremental_strategy: delete+insert
+      tags: ['nyc_311', 'incremental']

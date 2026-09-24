@@ -1,0 +1,50 @@
+version: 2
+
+seeds:
+  - name: incremental_311_requests
+    description: "Seed with a duplicate unique_key to validate the uniqueness test."
+    config:
+      schema: "TESTS"
+      column_types:
+        UNIQUE_KEY: number
+        AGENCY: varchar
+        AGENCY_NAME: varchar
+        COMPLAINT_TYPE: varchar
+        DESCRIPTOR: varchar
+        LOCATION_TYPE: varchar
+        INCIDENT_ZIP: varchar
+        INCIDENT_ADDRESS: varchar
+        STREET_NAME: varchar
+        CROSS_STREET_1: varchar
+        CROSS_STREET_2: varchar
+        INTERSECTION_STREET_1: varchar
+        INTERSECTION_STREET_2: varchar
+        ADDRESS_TYPE: varchar
+        CITY: varchar
+        LANDMARK: varchar
+        FACILITY_TYPE: varchar
+        STATUS: varchar
+        RESOLUTION_DESCRIPTION: varchar
+        COMMUNITY_BOARD: varchar
+        X_COORDINATE: number
+        Y_COORDINATE: number
+        PARK_FACILITY_NAME: varchar
+        PARK_BOROUGH: varchar
+        BBL: number
+        OPEN_DATA_CHANNEL_TYPE: varchar
+        VEHICLE_TYPE: varchar
+        TAXI_COMPANY_BOROUGH: varchar
+        TAXI_PICKUP_LOCATION: varchar
+        BRIDGE_HIGHWAY_NAME: varchar
+        BRIDGE_HIGHWAY_DIRECTION: varchar
+        ROAD_RAMP: varchar
+        BRIDGE_HIGHWAY_SEGMENT: varchar
+        LATITUDE: float
+        LONGITUDE: float
+        LOCATION: varchar
+        LOADED_AT: timestamp_ntz
+        BOROUGH: varchar
+        RESOLUTION_ACTION_UPDATED_DATE: varchar
+        CREATED_DATE: varchar
+        CLOSED_DATE: varchar
+        DUE_DATE: varchar

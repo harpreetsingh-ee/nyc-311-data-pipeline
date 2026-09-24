@@ -1,6 +1,12 @@
+{{ config(
+    materialized='incremental',
+    unique_key='unique_key',
+    incremental_strategy='delete+insert',
+) }}
+
 WITH source AS (
     SELECT *
-    FROM {{ ref('stg_311_service_requests') }}
+    FROM {{ ref('stg_311_service_requests_incremental') }}
 )
 
 SELECT 
@@ -24,6 +30,12 @@ SELECT
     ingested_at
 FROM source
 WHERE resolution_hours > 0
+{% if is_incremental() %}
+    AND ingested_at >= (
+        SELECT MAX(ingested_at)
+        FROM {{ this }}
+    )
+{% endif %}
 QUALIFY ROW_NUMBER() OVER (
     PARTITION BY unique_key
     ORDER BY ingested_at DESC

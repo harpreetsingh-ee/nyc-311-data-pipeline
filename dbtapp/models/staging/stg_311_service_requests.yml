@@ -1,12 +1,8 @@
 
 version: 2
 
-# Try using these source definitions instead!
-sources:
-  - name: cross_skilling_nyc_311
-    database: "{{ target.database }}"
-    schema: "{{ target.schema }}_RAW"
-    description: Cross-skilling NYC 311 data
-    tables:
-      - name: NYC_311_DATASET
-        description: NYC 311 dataset containing information about service requests, including details such as the type of request, location, and status.
+models:
+  - name: stg_311_service_requests
+    description: "Staging model for 311 service requests data"
+    config:
+      tags: ['nyc_311']

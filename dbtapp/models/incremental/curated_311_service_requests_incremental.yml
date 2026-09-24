@@ -1,9 +1,9 @@
 version: 2
 models:
-  - name: curated_311_service_requests
+  - name: curated_311_service_requests_incremental
     description: "Curated 311 service requests data - incremental model with is_incremental() toggle"
     config:
-      tags: ['nyc_311']
+      tags: ['nyc_311', 'incremental']
     columns:
       - name: unique_key
         description: "Unique key for each service request"

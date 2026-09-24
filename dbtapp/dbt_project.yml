@@ -36,5 +36,9 @@ models:
       +materialized: table
       +schema: TESTS
 
+    incremental:
+      +materialized: incremental
+      +schema: INCREMENTAL
+
 vars:
   resolution_hours_threshold: 72
