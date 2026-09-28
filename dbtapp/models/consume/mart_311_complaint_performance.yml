@@ -1,0 +1,8 @@
+version: 2
+models:
+  - name: mart_311_complaint_performance
+    description: "Mart table"
+    config:
+      tags: ['nyc_311', 'consume']
+      materialized: table
+    
