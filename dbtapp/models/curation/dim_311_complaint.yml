@@ -1,0 +1,21 @@
+version: 2
+models:
+  - name: dim_311_complaint
+    description: "Dimension table for 311 complaint types"
+    config:
+      tags: ['nyc_311']
+      materialized: view
+    columns:
+      - name: complaint_key
+        description: "Unique key for each complaint"
+        tests:
+          - not_null
+          - unique
+      - name: complaint_type 
+        description: "Type of complaint"
+        tests:
+          - not_null
+      - name: descriptor
+        description: "Description of the complaint type"
+        tests:
+          - not_null

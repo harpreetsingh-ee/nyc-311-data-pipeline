@@ -48,3 +48,7 @@ models:
         description: "Timestamp when the data was loaded"
         tests:
           - not_null
+      - name: ingested_at
+        description: "Timestamp when the record was ingested into the pipeline"
+        tests:
+          - not_null
