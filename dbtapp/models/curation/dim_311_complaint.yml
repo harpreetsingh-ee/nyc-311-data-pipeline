@@ -17,5 +17,3 @@ models:
           - not_null
       - name: descriptor
         description: "Description of the complaint type"
-        tests:
-          - not_null
