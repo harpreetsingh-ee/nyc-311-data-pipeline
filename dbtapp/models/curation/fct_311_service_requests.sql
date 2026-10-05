@@ -6,8 +6,6 @@ WITH source AS (
 SELECT
     unique_key,
     complaint.complaint_key AS complaint_key,
-    source.complaint_type AS complaint_type,
-    source.descriptor AS descriptor,
     agency,
     borough,
     status,

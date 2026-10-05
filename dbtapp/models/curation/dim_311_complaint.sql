@@ -4,10 +4,9 @@ WITH source AS (
 )
 
 SELECT
-    DISTINCT {{ dbt_utils.generate_surrogate_key(['complaint_type', 'descriptor']) }} as complaint_key,
-
-    -- DISTINCT CONCAT(complaint_type, '_', COALESCE(descriptor, 'UNKNOWN')) AS complaint_key,
+    {{ dbt_utils.generate_surrogate_key(['complaint_type', 'descriptor']) }} as complaint_key,
     complaint_type,
     descriptor
 FROM source
+GROUP BY complaint_type, descriptor
 

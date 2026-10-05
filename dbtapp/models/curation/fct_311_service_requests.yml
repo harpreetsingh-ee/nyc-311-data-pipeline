@@ -12,13 +12,16 @@ models:
         to_columns: [complaint_key] 
     columns:
       - name: unique_key
+        data_type: number(38,0)
         constraints:
           - type: primary_key
+            warn_unenforced: false
         description: "Primary key for each 311 service request"
         tests:
           - not_null
           - unique
       - name: complaint_key
+        data_type: varchar
         description: "Foreign key to dim_311_complaint"
         tests:
           - not_null
@@ -27,26 +30,38 @@ models:
                 to: ref('dim_311_complaint')
                 field: complaint_key
       - name: agency
+        data_type: varchar
         description: "Agency responsible for handling the service request"
       - name: borough
+        data_type: varchar
         description: "Borough where the service request originated"
       - name: status
+        data_type: varchar
         description: "Current status of the service request"
       - name: open_data_channel_type
+        data_type: varchar
         description: "Channel through which the request was submitted"
       - name: created_date
+        data_type: timestamp_ntz
         description: "Timestamp when the service request was created"
       - name: closed_date
+        data_type: timestamp_ntz
         description: "Timestamp when the service request was closed"
       - name: resolution_action_updated_date
+        data_type: timestamp_ntz
         description: "Timestamp when the resolution action was last updated"
       - name: created_year
+        data_type: number(4,0)
         description: "Year extracted from created_date"
       - name: created_month
+        data_type: number(2,0)
         description: "Month extracted from created_date"
       - name: is_closed
+        data_type: boolean
         description: "Flag indicating whether the service request is closed"
       - name: resolution_hours
+        data_type: number(9,0)
         description: "Number of hours taken to resolve the service request"
       - name: ingested_at
+        data_type: timestamp_ntz
         description: "Timestamp when the record was ingested into the pipeline"

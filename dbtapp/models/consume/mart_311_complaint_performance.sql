@@ -5,11 +5,13 @@ WITH source AS (
 
 SELECT
     borough,
-    complaint_type,
+    dim.complaint_type,
     COUNT(unique_key) as total_requests,
     COUNT_IF(is_closed = TRUE) as closed_requests,
     COUNT_IF(is_closed = FALSE) as open_requests,
     AVG(resolution_hours) AS avg_resolution_hours,
 FROM source
+JOIN {{ ref('dim_311_complaint') }} AS dim
+    ON source.complaint_key = dim.complaint_key
 GROUP BY borough, complaint_type
 
