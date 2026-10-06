@@ -238,3 +238,6 @@ terraform.rc
 # Local Terraform credentials and keys
 terraform/keys/
 
+# spark
+se-spark/data/
+se-spark/.spark-env/

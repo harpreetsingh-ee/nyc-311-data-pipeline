@@ -1,0 +1,6 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/se-spark/.spark-env/bin/python",
+  "python.terminal.activateEnvironment": true,
+  "python.analysis.extraPaths": ["${workspaceFolder}/se-spark/src"],
+  "jupyter.notebookFileRoot": "${workspaceFolder}/se-spark"
+}
