@@ -3,10 +3,11 @@ from pathlib import Path
 
 from pyspark.sql import DataFrame
 
-from nyc311.config import PARTITION_COLUMN
 
-
-def save(df: DataFrame, path: Path) -> None:
-    # partitionBy makes one folder per borough (borough=BROOKLYN/, ...), so a query
-    # for one borough only reads that folder.
-    df.write.mode("overwrite").partitionBy(PARTITION_COLUMN).parquet(str(path))
+def save(df: DataFrame, path: Path, partition_by: str | list[str] | None = None) -> None:
+    # partitionBy makes one folder per value (e.g. borough=BROOKLYN/), so a query
+    # for one value only reads that folder. Without it the output is not partitioned.
+    writer = df.write.mode("overwrite")
+    if partition_by:
+        writer = writer.partitionBy(*([partition_by] if isinstance(partition_by, str) else partition_by))
+    writer.parquet(str(path))

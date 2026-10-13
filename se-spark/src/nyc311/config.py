@@ -9,4 +9,4 @@ PARQUET_FILE = DATA_DIR / "311-service-requests-from-2010-to-present.parquet"
 OUTPUT_DIR = DATA_DIR / "etl_output"
 
 SLA_HOURS = 72  # a request closed within this many hours counts as "within SLA"
-PARTITION_COLUMN = "borough"
+REQUESTS_PARTITION_COLUMNS = ["borough", "complaint_type"]

@@ -17,8 +17,6 @@ def run(output_dir: Path = OUTPUT_DIR) -> DataFrame:
         summary = summarise(requests)
         summary.show(10, truncate=False)
         summary.where("borough == 'MANHATTAN'").show(10, truncate=False)
-        save(summary, output_dir / "summary")
-        print("Saved to", output_dir / "summary")
         return summary
     finally:
         spark.stop()
