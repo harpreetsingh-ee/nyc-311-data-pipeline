@@ -19,7 +19,6 @@ def read_csv_file(spark: SparkSession, path: Path) -> DataFrame:
 
 
 def conform(df: DataFrame) -> DataFrame:
-    """Give any source the CSV's column types and snake_case names. Unparseable values become null."""
     return df.select(*[
         F.nullif(F.col(f"`{f.name}`").cast("string"), F.lit("")).try_cast(f.dataType).alias(to_snake_case(f.name))
         for f in RAW_COLUMNS.fields
@@ -27,7 +26,6 @@ def conform(df: DataFrame) -> DataFrame:
 
 
 def read_json_file(spark: SparkSession, path: Path) -> DataFrame:
-    """Read a JSON Lines file (one object per line). Values are the CSV strings, so they are cast to RAW_COLUMNS types."""
     return conform(spark.read.json(str(path)))
 
 

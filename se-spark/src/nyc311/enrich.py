@@ -4,7 +4,6 @@ from pyspark.sql import DataFrame
 from pyspark.sql.functions import col, udf
 from pyspark.sql.types import StringType
 
-# Rules are checked in order and the first match wins.
 OUTCOME_RULES = [
     ("DUPLICATE", r"\bduplicate\b"),
     ("NO_ACTION_NEEDED", r"no evid|no action|no violations? (?:were )?(?:issued|found|observed)"),
@@ -12,7 +11,6 @@ OUTCOME_RULES = [
     ("INFO_PROVIDED", r"see notes|additional infor|status for this request"),
 ]
 
-# Known agency names; the free text varies too much for a generic "Department of ..." match.
 AGENCY_PATTERN = re.compile(
     r"\b(Police Department|Fire Department|Taxi and Limousine Commission"
     r"|Department of (?:Housing Preservation and Development|Environmental? Protection|Transportation"
@@ -21,9 +19,7 @@ AGENCY_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
-
 def classify(text):
-    """Turn a resolution sentence into a short label."""
     if text is None:
         return None
     lowered = text.lower()
@@ -43,7 +39,6 @@ def add_outcome(df: DataFrame) -> DataFrame:
 
 
 def extract_agency(text):
-    """Find the agency named in a resolution sentence, or None."""
     if text is None:
         return None
     match = AGENCY_PATTERN.search(text)

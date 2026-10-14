@@ -10,14 +10,12 @@ NUM_ROWS = 1000
 
 
 def read_rows(csv_path: Path, limit: int) -> list[dict]:
-    """Read the first `limit` rows as dicts keyed by the CSV header."""
     csv.field_size_limit(sys.maxsize)
     with open(csv_path, newline="", encoding="utf-8") as f:
         return list(islice(csv.DictReader(f), limit))
 
 
 def write_jsonl(rows: list[dict], path: Path) -> None:
-    """Write rows as JSON Lines (one object per line), the format spark.read.json expects."""
     with open(path, "w", encoding="utf-8") as f:
         for row in rows:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
