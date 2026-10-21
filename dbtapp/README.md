@@ -1,6 +1,27 @@
 # DBT learning
 
-Incremental strategies
+## Commands
+dbt init --project-name dbt
+dbt debug
+dbt deps
+dbt lint
+dbt clean
+dbt complie
+dbt build
+dbt snapshot
+dbt seed
+dbt run -s stg_311_service_requests
+dbt test -s curated_311_service_requests
+dbt run -s tag:incremental
+dbt run -s tag:incremental --full-refresh
+dbt docs generate
+dbt docs serve
+
+make sure to update ~/.dbt/profiles.yml for 
+    private_key_path: '<SNOWFLAKE_RSA_KEY>.p8'
+    private_key_passphrase: ""
+
+### Incremental strategies
 
 1. append: Inserts new records without checking for updates, deletes, or duplicates, making it ideal for append-only logs.
 2. merge: Updates matching records and inserts new ones using a unique_key (similar to SCD1), though it can be costly on large tables.
