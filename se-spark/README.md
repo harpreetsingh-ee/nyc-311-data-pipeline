@@ -35,7 +35,12 @@ flowchart LR
 
 ```bash
 cd se-spark
-source .spark-env/bin/activate
+uv venv .sparkenv --python 3.11.6
+source .sparkenv/bin/activate 
+uv pip install -r requirements.txt
+
+jupyter notebook
+
 python src/run_etl_pipeline.py
 python src/run_summary.py
 ```
