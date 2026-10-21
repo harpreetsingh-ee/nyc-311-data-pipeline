@@ -4,8 +4,8 @@ from airflow.operators.bash import BashOperator
 import base64
 import os;
 
-DBT_PROJECT_DIR = "/Users/hs086u/Documents/learning/terraform-projects/nyc-311-data-pipeline/dbtapp"
-DBT_PROFILES_DIR = "/Users/hs086u/.dbt"
+DBT_PROJECT_DIR = "/Users/harpreetsingh/Documents/nyc-311-data-pipeline/dbtapp"
+DBT_PROFILES_DIR = "/Users/harpreetsingh/.dbt"
 VENV_DIR = "/tmp/dbt_run_env"
 DBT_EXECUTABLE = f"{VENV_DIR}/bin/dbt"
 
@@ -24,6 +24,7 @@ DBT_ENV = {
     "DBT_PROJECT_DIR": "/usr/local/airflow/dbtapp",
     "DBT_PROFILES_DIR": "/home/astro/.dbt",
     "DBT_ENV_SECRET_SNOWFLAKE_KEY": decoded_key,
+    "SNOWFLAKE_PRIVATE_KEY_PATH": "/usr/local/airflow/keys/snowflake_rsa_key.p8",
 }
 
 # 2. Define default arguments for your tasks

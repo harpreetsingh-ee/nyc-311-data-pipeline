@@ -3,18 +3,21 @@ services:
   scheduler:
     image: astrocrpublic.azurecr.io/runtime:3.3-7
     volumes:
-      - /Users/hs086u/Documents/learning/terraform-projects/nyc-311-data-pipeline/dbtapp:/usr/local/airflow/dbtapp
-      - /Users/hs086u/.dbt:/home/astro/.dbt
-      - /Users/hs086u/Documents/learning/terraform-projects/nyc-311-data-pipeline/dbt-env:/usr/local/airflow/dbt-env
+      - ${PROJECT_ROOT:-..}/dbtapp:/usr/local/airflow/dbtapp
+      - ~/.dbt:/home/astro/.dbt
+      - ${PROJECT_ROOT:-..}/.dbtenv:/usr/local/airflow/dbt-env
+      - ${PROJECT_ROOT:-..}/keys:/usr/local/airflow/keys:usr/local/airflow/keys
   webserver:
     image: astrocrpublic.azurecr.io/runtime:3.3-7
     volumes:
-      - /Users/hs086u/Documents/learning/terraform-projects/nyc-311-data-pipeline/dbtapp:/usr/local/airflow/dbtapp
-      - /Users/hs086u/.dbt:/home/astro/.dbt
-      - /Users/hs086u/Documents/learning/terraform-projects/nyc-311-data-pipeline/dbt-env:/usr/local/airflow/dbt-env
+      - ${PROJECT_ROOT:-..}/dbtapp:/usr/local/airflow/dbtapp
+      - ~/.dbt:/home/astro/.dbt
+      - ${PROJECT_ROOT:-..}/.dbtenv:/usr/local/airflow/dbt-env
+      - ${PROJECT_ROOT:-..}/keys:/usr/local/airflow/keys:usr/local/airflow/keys
   triggerer:
     image: astrocrpublic.azurecr.io/runtime:3.3-7
     volumes:
-      - /Users/hs086u/Documents/learning/terraform-projects/nyc-311-data-pipeline/dbtapp:/usr/local/airflow/dbtapp
-      - /Users/hs086u/.dbt:/home/astro/.dbt
-      - /Users/hs086u/Documents/learning/terraform-projects/nyc-311-data-pipeline/dbt-env:/usr/local/airflow/dbt-env
+      - ${PROJECT_ROOT:-..}/dbtapp:/usr/local/airflow/dbtapp
+      - ~/.dbt:/home/astro/.dbt
+      - ${PROJECT_ROOT:-..}/.dbtenv:/usr/local/airflow/dbt-env
+      - ${PROJECT_ROOT:-..}/keys:/usr/local/airflow/keys:usr/local/airflow/keys
