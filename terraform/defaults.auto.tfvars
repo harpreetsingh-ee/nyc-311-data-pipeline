@@ -11,6 +11,10 @@ snowflake_warehouse_name           = "SNOWFLAKE_LEARNING_WH"
 snowflake_database_name            = "DE_CROSS_SKILLING_NYC_311"
 snowflake_schema_names             = ["raw", "curated", "consume"]
 snowflake_schema_prefix            = "HARPREET_SINGH"
+snowflake_account_name             = "DAB70621"
+snowflake_organization_name        = "GUSDATD"
+snowflake_role                     = "SE_DE_PARTICIPANT"
+snowflake_user                     = "HARPREET.SINGH"
 
 snowflake_table_columns = [
   { name = "UNIQUE_KEY", type = "NUMBER(38,0)" },

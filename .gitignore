@@ -235,8 +235,8 @@ override.tf.json
 terraform.rc
 .terraform.lock.hcl
 
-# Local Terraform credentials and keys
-terraform/keys/
+# Local credentials keys
+keys/
 
 # spark
 se-spark/data/
